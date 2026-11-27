@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كويز علم الأحياء - البكالوريا</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --primary-light: #ccfbf1;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      background: linear-gradient(135deg, #eef6f5 0%, #f8fafc 60%, #e6f4f1 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 14px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 1.65rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+    }
+
+    .rules-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-right: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .rules-box h3 {
+      font-size: 1rem;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      font-size: 0.94rem;
+    }
+
+    .rules-list li::before {
+      content: "• ";
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.12s, background-color 0.2s, opacity 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .alert-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .alert-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .q-counter {
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0e7490;
+      border: 1px solid #a5f3fc;
+    }
+
+    .timer-box.urgent {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: #fca5a5;
+      animation: pulse 0.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    .progress-wrap {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      width: 100%;
+      transition: width 1s linear, background-color 0.3s;
+    }
+
+    .question-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    .options {
+      display: grid;
+      gap: 11px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: right;
+      padding: 14px 16px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f0fdfa;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+      opacity: 0.9;
+    }
+
+    .score-card {
+      text-align: center;
+      padding: 12px 0 20px;
+    }
+
+    .score-circle {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      border: 6px solid var(--primary);
+      background: #f0fdfa;
+      color: var(--primary-dark);
+    }
+
+    .score-circle.low {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .score-num {
+      font-size: 2rem;
+      line-height: 1.1;
+    }
+
+    .score-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .student-meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .review-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .review-item.wrong {
+      border-color: #fecaca;
+      background: #fffafa;
+    }
+
+    .review-item.right {
+      border-color: #bbf7d0;
+      background: #fafffb;
+    }
+
+    .review-q {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tag-right {
+      display: inline-block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .tag-wrong {
+      display: inline-block;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge">مادة علم الأحياء • البكالوريا</div>
+      <h1>كويز إلكتروني تفاعلي</h1>
+      <p>الوحدة الهرمونية والتنظيم (صفحات 109–111)</p>
+    </div>
+
+    <!-- شاشة الدخول -->
+    <section id="entryScreen" class="card">
+      <div id="entryAlert" class="alert alert-danger hidden"></div>
+
+      <div class="rules-box">
+        <h3>تعليمات الكويز قبل البدء:</h3>
+        <ul class="rules-list">
+          <li>عدد الأسئلة: <strong>5 أسئلة عشوائية</strong> مختلفة لكل طالب من بنك الأسئلة.</li>
+          <li>مدة كل سؤال: <strong>45 ثانية</strong> وينتقل تلقائياً عند انتهاء الوقت.</li>
+          <li>عدد المحاولات: <strong>محاولة واحدة فقط</strong> لكل طالب.</li>
+          <li>صلاحية الكويز: متاح لمدة <strong>يوم واحد (24 ساعة)</strong> من وقت بدء تفعيله.</li>
+          <li>في النهاية تظهر نتيجتك من <strong>100%</strong> مع توضيح الإجابة الصحيحة لأي سؤال أخطأت فيه.</li>
+        </ul>
+      </div>
+
+      <form id="entryForm">
+        <div class="form-group">
+          <label for="studentName">الاسم الثلاثي للطالب</label>
+          <input type="text" id="studentName" placeholder="اكتب اسمك الكامل..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="instituteName">اسم المعهد</label>
+          <input type="text" id="instituteName" placeholder="مثال: معهد النخبة..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="sectionName">اسم الشعبة</label>
+          <input type="text" id="sectionName" placeholder="مثال: الشعبة الأولى / شعبة أ..." required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">ابدأ الكويز الآن</button>
+      </form>
+    </section>
+
+    <!-- شاشة الأسئلة -->
+    <section id="quizScreen" class="card hidden">
+      <div class="quiz-top">
+        <span id="questionCounter" class="q-counter">السؤال 1 من 5</span>
+        <div id="timerBox" class="timer-box">
+          <span>الوقت المتبقي:</span>
+          <span id="timerText">45</span>
+          <span>ثانية</span>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <h2 id="questionText" class="question-text"></h2>
+      <div id="optionsList" class="options"></div>
+    </section>
+
+    <!-- شاشة النتيجة -->
+    <section id="resultScreen" class="card hidden">
+      <div class="score-card">
+        <div id="scoreCircle" class="score-circle">
+          <span id="scorePercent" class="score-num">0%</span>
+          <span id="scoreFraction" class="score-sub">0 / 5</span>
+        </div>
+        <h2 id="resultHeading">النتيجة النهائية</h2>
+        <p id="studentSummary" class="student-meta"></p>
+      </div>
+
+      <h3 style="margin-bottom: 12px;">مراجعة الأسئلة والإجابات الصحيحة:</h3>
+      <div id="reviewList"></div>
+
+      <div class="footer-note">تم تسجيل محاولتك ولا يُسمح بإعادة الكويز لنفس الطالب.</div>
+    </section>
+  </div>
+
+  <script>
+    // بنك الأسئلة (21 سؤالاً بعد حذف الأسئلة 12 و 15 و 17) — الخيار الأول هو الإجابة الصحيحة
+    const QUESTION_BANK = [
+      {
+        q: "ما الذي يصل الوطاء بالغدة النخامية؟ (ص 109)",
+        options: ["السويقة النخامية", "النخامة الأمامية", "النخامة الخلفية", "الغدة الدرقية"],
+        correct: "السويقة النخامية"
+      },
+      {
+        q: "ما نوع الاتصال بين الوطاء والنخامة الخلفية؟ (ص 109)",
+        options: ["عصبي", "دموي", "لمفي", "مباشر عبر الغلوكوز"],
+        correct: "عصبي"
+      },
+      {
+        q: "ما نوع الاتصال بين الوطاء والنخامة الأمامية؟ (ص 109)",
+        options: ["دموي", "عصبي", "لمفي", "مباشر عبر الغلوكوز"],
+        correct: "دموي"
+      },
+      {
+        q: "أين تتشكّل هرمونات ADH وOXT؟ (ص 109)",
+        options: ["في أجسام عصبونات الوطاء", "في النخامة الأمامية", "في الغدة الدرقية", "في جزر النغرهانس"],
+        correct: "في أجسام عصبونات الوطاء"
+      },
+      {
+        q: "كيف يصل ADH وOXT إلى النخامة الخلفية؟ (ص 109)",
+        options: ["عبر محاور العصبونات", "عبر عوامل الإطلاق", "عبر الأوعية اللمفية", "عبر أقنية مفرغة"],
+        correct: "عبر محاور العصبونات"
+      },
+      {
+        q: "أي تلقيم يحافظ على الحدّ الفيزيولوجي للهرمون؟ (ص 110)",
+        options: ["الراجع السلبي", "الراجع الإيجابي", "التنظيم المباشر", "الاتصال العصبي"],
+        correct: "الراجع السلبي"
+      },
+      {
+        q: "أي تلقيم يفاقم التغيّر؟ (ص 110)",
+        options: ["الراجع الإيجابي", "الراجع السلبي", "التنظيم المباشر", "الاتصال الدموي"],
+        correct: "الراجع الإيجابي"
+      },
+      {
+        q: "أي تلقيم يدفع الجسم نحو الاتزان الداخلي؟ (ص 110)",
+        options: ["الراجع السلبي", "الراجع الإيجابي", "الاتصال اللمفي", "الاتصال العصبي"],
+        correct: "الراجع السلبي"
+      },
+      {
+        q: "ما الهرمونان اللذان ينظّمان غلوكوز الدم مباشرةً؟ (ص 110)",
+        options: ["الأنسولين والغلوكاغون", "ADH وOXT", "T3 وT4", "الأدرينالين والنورأدرينالين"],
+        correct: "الأنسولين والغلوكاغون"
+      },
+      {
+        q: "أين يُفرَز الأنسولين والغلوكاغون؟ (ص 110)",
+        options: ["في جزر النغرهانس", "في النخامة الأمامية", "في لبّ الكظر", "في الغدة الدرقية"],
+        correct: "في جزر النغرهانس"
+      },
+      {
+        q: "كيف تعمل ثنائيات التنظيم الهرموني المباشر؟ (ص 110)",
+        options: ["بشكل متعاكس", "بشكل متماثل", "بوساطة عوامل الإطلاق", "عبر محاور العصبونات"],
+        correct: "بشكل متعاكس"
+      },
+      {
+        q: "في التلقيم الراجع السلبي، ما أثر ارتفاع هرمون الغدة؟ (ص 109)",
+        options: ["تثبيط الوطاء والنخامة الأمامية", "تنشيط الوطاء والنخامة الأمامية", "تنشيط النخامة الخلفية", "زيادة إفراز عوامل الإطلاق"],
+        correct: "تثبيط الوطاء والنخامة الأمامية"
+      },
+      {
+        q: "في التلقيم الراجع الإيجابي، ماذا يحدث لعوامل الإطلاق؟ (ص 109)",
+        options: ["يزداد إفرازها", "ينقص إفرازها", "يتوقّف إفرازها", "يبقى إفرازها ثابتًا"],
+        correct: "يزداد إفرازها"
+      },
+      {
+        q: "كيف يختلف التلقيم السلبي عن الإيجابي؟ (ص 110)",
+        options: ["الأول يخفّف التغيّر والثاني يفاقمه", "الأول يفاقم التغيّر والثاني يخفّفه", "كلاهما يخفّف التغيّر", "كلاهما يفاقم التغيّر"],
+        correct: "الأول يخفّف التغيّر والثاني يفاقمه"
+      },
+      {
+        q: "ماذا يحدث لإفراز TSH عند ارتفاع T3 وT4؟ (ص 110)",
+        options: ["ينخفض", "يزداد", "يبقى ثابتًا", "يرتفع ثم يبقى مرتفعًا"],
+        correct: "ينخفض"
+      },
+      {
+        q: "ما نوع التلقيم عند تثبيط الوطاء بارتفاع T3 وT4؟ (ص 110)",
+        options: ["راجع سلبي", "راجع إيجابي", "تنظيم مباشر", "اتصال عصبي"],
+        correct: "راجع سلبي"
+      },
+      {
+        q: "أي ترتيب يوافق تنظيم إفراز هرمونات الدرقية؟ (ص 111)",
+        options: ["الوطاء ثم النخامة الأمامية ثم الدرقية", "الدرقية ثم النخامة الأمامية ثم الوطاء", "النخامة الخلفية ثم الوطاء ثم الدرقية", "الوطاء ثم الدرقية ثم النخامة الأمامية"],
+        correct: "الوطاء ثم النخامة الأمامية ثم الدرقية"
+      },
+      {
+        q: "ما نوع التلقيم في مثال إفراغ الحليب؟ (ص 111)",
+        options: ["راجع إيجابي", "راجع سلبي", "تنظيم مباشر", "اتصال دموي"],
+        correct: "راجع إيجابي"
+      },
+      {
+        q: "أي ثنائية هرمونية تعمل بشكل متعاكس؟ (ص 111)",
+        options: ["الأنسولين والغلوكاغون", "T3 وT4", "TSH والتيرونين", "ADH وOXT"],
+        correct: "الأنسولين والغلوكاغون"
+      },
+      {
+        q: "أي ثنائية لا تعمل بشكل متعاكس؟ (ص 111)",
+        options: ["التيرونين وTSH", "الأنسولين والغلوكاغون", "الكالسيتونين والباراثورمون", "الميلاتونين وMSH"],
+        correct: "التيرونين وTSH"
+      },
+      {
+        q: "تنظيم غلوكوز الدم بالأنسولين والغلوكاغون مثال على ماذا؟ (ص 110)",
+        options: ["التنظيم الهرموني المباشر", "التلقيم الراجع الإيجابي", "اتصال الوطاء بالنخامة الخلفية", "التنظيم بعوامل الإطلاق"],
+        correct: "التنظيم الهرموني المباشر"
+      }
+    ];
+
+    const QUESTIONS_PER_STUDENT = 5;
+    const SECONDS_PER_QUESTION = 45;
+    const QUIZ_DURATION_MS = 24 * 60 * 60 * 1000; // يوم واحد (24 ساعة)
+
+    const STORAGE_KEYS = {
+      START_TIME: "bio_quiz_24h_start_v1",
+      ATTEMPTS: "bio_quiz_attempts_v1"
+    };
+
+    function getQuizStartTime() {
+      let start = localStorage.getItem(STORAGE_KEYS.START_TIME);
+      if (!start) {
+        start = String(Date.now());
+        localStorage.setItem(STORAGE_KEYS.START_TIME, start);
+      }
+      return Number(start);
+    }
+
+    function isQuizExpired() {
+      return (Date.now() - getQuizStartTime()) > QUIZ_DURATION_MS;
+    }
+
+    function getAttempts() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.ATTEMPTS) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveAttempt(attempt) {
+      const attempts = getAttempts();
+      attempts.push(attempt);
+      localStorage.setItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(attempts));
+    }
+
+    function normalizeKey(name, institute, section) {
+      return `${name.trim().toLowerCase()}|${institute.trim().toLowerCase()}|${section.trim().toLowerCase()}`;
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // عناصر الواجهة
+    const entryScreen = document.getElementById("entryScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const entryAlert = document.getElementById("entryAlert");
+    const entryForm = document.getElementById("entryForm");
+
+    const questionCounter = document.getElementById("questionCounter");
+    const timerBox = document.getElementById("timerBox");
+    const timerText = document.getElementById("timerText");
+    const progressBar = document.getElementById("progressBar");
+    const questionText = document.getElementById("questionText");
+    const optionsList = document.getElementById("optionsList");
+
+    const scoreCircle = document.getElementById("scoreCircle");
+    const scorePercent = document.getElementById("scorePercent");
+    const scoreFraction = document.getElementById("scoreFraction");
+    const resultHeading = document.getElementById("resultHeading");
+    const studentSummary = document.getElementById("studentSummary");
+    const reviewList = document.getElementById("reviewList");
+
+    let studentInfo = null;
+    let selectedQuestions = [];
+    let currentIndex = 0;
+    let answersLog = [];
+    let timerInterval = null;
+    let remainingSeconds = SECONDS_PER_QUESTION;
+    let questionLocked = false;
+
+    function showAlert(msg) {
+      entryAlert.textContent = msg;
+      entryAlert.classList.remove("hidden");
+    }
+
+    function hideAlert() {
+      entryAlert.classList.add("hidden");
+    }
+
+    // التحقق المبدئي من انتهاء مدة اليوم الواحد
+    window.addEventListener("DOMContentLoaded", () => {
+      getQuizStartTime();
+      if (isQuizExpired()) {
+        showAlert("انتهت مدة الكويز المحددة بيوم واحد (24 ساعة)، ولا يمكن استقبال محاولات جديدة.");
+        entryForm.querySelector("button").disabled = true;
+      }
+    });
+
+    entryForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      if (isQuizExpired()) {
+        showAlert("عذراً، انتهت صلاحية الكويز بعد مرور يوم واحد (24 ساعة).");
+        return;
+      }
+
+      const name = document.getElementById("studentName").value.trim();
+      const institute = document.getElementById("instituteName").value.trim();
+      const section = document.getElementById("sectionName").value.trim();
+
+      if (!name || !institute || !section) {
+        showAlert("يرجى تعبئة الاسم الثلاثي واسم المعهد واسم الشعبة.");
+        return;
+      }
+
+      const key = normalizeKey(name, institute, section);
+      const attempts = getAttempts();
+      const alreadySubmitted = attempts.some((a) => a.key === key);
+
+      if (alreadySubmitted) {
+        showAlert("لقد قمت بتقديم هذا الكويز مسبقاً. يُسمح بمحاولة واحدة فقط لكل طالب.");
+        return;
+      }
+
+      studentInfo = { name, institute, section, key };
+
+      // اختيار 5 أسئلة عشوائية مختلفة وخلط خيارات كل سؤال
+      selectedQuestions = shuffleArray(QUESTION_BANK)
+        .slice(0, QUESTIONS_PER_STUDENT)
+        .map((item) => ({
+          question: item.q,
+          options: shuffleArray(item.options),
+          correctAnswer: item.correct
+        }));
+
+      currentIndex = 0;
+      answersLog = [];
+
+      entryScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      renderQuestion();
+    });
+
+    function renderQuestion() {
+      clearInterval(timerInterval);
+      questionLocked = false;
+      remainingSeconds = SECONDS_PER_QUESTION;
+
+      const currentQ = selectedQuestions[currentIndex];
+      questionCounter.textContent = `السؤال ${currentIndex + 1} من ${selectedQuestions.length}`;
+      questionText.textContent = currentQ.question;
+
+      updateTimerUI();
+
+      optionsList.innerHTML = "";
+      currentQ.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => handleAnswer(opt));
+        optionsList.appendChild(btn);
+      });
+
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        updateTimerUI();
+
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          handleAnswer(null); // انتهاء الوقت
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      timerText.textContent = String(remainingSeconds);
+      const pct = Math.max(0, (remainingSeconds / SECONDS_PER_QUESTION) * 100);
+      progressBar.style.width = `${pct}%`;
+
+      if (remainingSeconds <= 10) {
+        timerBox.classList.add("urgent");
+        progressBar.style.backgroundColor = "#dc2626";
+      } else {
+        timerBox.classList.remove("urgent");
+        progressBar.style.backgroundColor = "#0f766e";
+      }
+    }
+
+    function handleAnswer(chosenOption) {
+      if (questionLocked) return;
+      questionLocked = true;
+      clearInterval(timerInterval);
+
+      const allButtons = optionsList.querySelectorAll("button");
+      allButtons.forEach((b) => (b.disabled = true));
+
+      const currentQ = selectedQuestions[currentIndex];
+      const isCorrect = chosenOption === currentQ.correctAnswer;
+
+      answersLog.push({
+        question: currentQ.question,
+        chosen: chosenOption === null ? "انتهى الوقت (لم يتم الاختيار)" : chosenOption,
+        correctAnswer: currentQ.correctAnswer,
+        isCorrect
+      });
+
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < selectedQuestions.length) {
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 280);
+    }
+
+    function finishQuiz() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+
+      const correctCount = answersLog.filter((item) => item.isCorrect).length;
+      const percentage = Math.round((correctCount / selectedQuestions.length) * 100);
+
+      saveAttempt({
+        key: studentInfo.key,
+        name: studentInfo.name,
+        institute: studentInfo.institute,
+        section: studentInfo.section,
+        score: correctCount,
+        total: selectedQuestions.length,
+        percentage,
+        submittedAt: new Date().toISOString()
+      });
+
+      scorePercent.textContent = `${percentage}%`;
+      scoreFraction.textContent = `${correctCount} / ${selectedQuestions.length}`;
+      studentSummary.textContent = `الطالب: ${studentInfo.name} | المعهد: ${studentInfo.institute} | الشعبة: ${studentInfo.section}`;
+
+      if (percentage < 50) {
+        scoreCircle.classList.add("low");
+        resultHeading.textContent = "تحتاج إلى مراجعة إضافية";
+      } else {
+        scoreCircle.classList.remove("low");
+        resultHeading.textContent = percentage === 100 ? "ممتاز! علامة كاملة" : "أحسنت! تم إنهاء الكويز";
+      }
+
+      reviewList.innerHTML = "";
+      answersLog.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = `review-item ${item.isCorrect ? "right" : "wrong"}`;
+
+        let html = `<div class="review-q">${idx + 1}. ${item.question}</div>`;
+
+        if (item.isCorrect) {
+          html += `<div class="tag-right">إجابتك صحيحة: ${item.correctAnswer}</div>`;
+        } else {
+          html += `<div class="tag-wrong">إجابتك: ${item.chosen}</div><br/>`;
+          html += `<div class="tag-right">الإجابة الصحيحة: ${item.correctAnswer}</div>`;
+        }
+
+        div.innerHTML = html;
+        reviewList.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
